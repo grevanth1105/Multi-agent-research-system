@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchMind · Autonomous AI Research Agents</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔬</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Marked for Markdown Parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-background">
+        <div class="ambient-glow glow-top-left"></div>
+        <div class="ambient-glow glow-bottom-right"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="brand-icon">🔬</span>
+                <span class="brand-name">Research<span class="brand-highlight">Mind</span></span>
+                <span class="brand-badge">FastAPI v2.0</span>
+            </div>
+
+            <div class="nav-actions">
+                <div class="server-status" id="serverStatus" title="Backend connection status">
+                    <span class="status-dot"></span>
+                    <span class="status-label">FastAPI Ready</span>
+                </div>
+                <button class="nav-btn" id="btnInfoModal" title="About System">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span>Architecture</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-eyebrow">Multi-Agent AI Ecosystem</div>
+            <h1 class="hero-title">Autonomous <span>Research</span> Swarm</h1>
+            <p class="hero-subtitle">
+                Four specialized AI agents collaborate sequentially — searching the live web, deep-scraping source content, synthesising an in-depth research report, and peer-reviewing with strict critique.
+            </p>
+        </section>
+
+        <!-- Workbench Grid -->
+        <div class="workbench-grid">
+            <!-- Left Column: Input and Triggers -->
+            <div class="workbench-col left-col">
+                <div class="card card-input">
+                    <div class="card-eyebrow">Research Query</div>
+                    <label for="topicInput" class="input-label">What topic would you like to investigate?</label>
+                    <div class="input-group">
+                        <span class="input-icon">🔍</span>
+                        <input 
+                            type="text" 
+                            id="topicInput" 
+                            placeholder="e.g. Quantum computing breakthroughs in 2025" 
+                            autocomplete="off"
+                            spellcheck="false"
+                        />
+                        <button class="clear-btn" id="clearBtn" title="Clear input" style="display:none;">✕</button>
+                    </div>
+
+                    <!-- Example Chips -->
+                    <div class="chip-container">
+                        <span class="chip-label">TRY:</span>
+                        <div class="chips-list">
+                            <button class="chip-btn" data-topic="LLM agents 2025">LLM agents 2025</button>
+                            <button class="chip-btn" data-topic="CRISPR gene editing in 2025">CRISPR gene editing</button>
+                            <button class="chip-btn" data-topic="Fusion energy commercial progress">Fusion energy</button>
+                            <button class="chip-btn" data-topic="Solid-state battery breakthroughs">Solid-state batteries</button>
+                        </div>
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="actions-wrapper">
+                        <button class="btn btn-primary" id="startPipelineBtn">
+                            <span class="btn-icon">⚡</span>
+                            <span class="btn-text">Run Research Pipeline</span>
+                        </button>
+                        <button class="btn btn-secondary" id="cancelPipelineBtn" style="display: none;">
+                            <span class="btn-icon">⏹</span>
+                            <span class="btn-text">Stop Research</span>
+                        </button>
+                    </div>
+
+                    <!-- Live Error Banner -->
+                    <div class="error-banner" id="errorBanner" style="display: none;">
+                        <div class="error-header">
+                            <span class="error-icon">⚠️</span>
+                            <span class="error-title" id="errorTitle">Agent Execution Error</span>
+                        </div>
+                        <p class="error-message" id="errorMessage"></p>
+                        <div class="error-actions">
+                            <button class="btn btn-sm btn-retry" id="retryBtn">↺ Retry Step</button>
+                            <button class="btn btn-sm btn-dismiss" id="dismissErrorBtn">Dismiss</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pipeline System Spec Card -->
+                <div class="card card-spec">
+                    <div class="card-header-compact">
+                        <span class="spec-title">⚙️ Agent Topology</span>
+                        <span class="spec-badge">LangChain + Google Gemini + Tavily</span>
+                    </div>
+                    <div class="spec-list">
+                        <div class="spec-item">
+                            <span class="spec-dot green"></span>
+                            <span class="spec-agent">01 Search Agent:</span>
+                            <span class="spec-role">Tavily Search API tool integration</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-dot blue"></span>
+                            <span class="spec-agent">02 Reader Agent:</span>
+                            <span class="spec-role">BeautifulSoup dynamic HTML scraper</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-dot orange"></span>
+                            <span class="spec-agent">03 Writer Chain:</span>
+                            <span class="spec-role">Prompt-engineered markdown synthesizer</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-dot purple"></span>
+                            <span class="spec-agent">04 Critic Chain:</span>
+                            <span class="spec-role">Adversarial evaluation & scoring rubrics</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Interactive Pipeline Stepper -->
+            <div class="workbench-col right-col">
+                <div class="card card-pipeline">
+                    <div class="pipeline-header">
+                        <div class="pipeline-heading-group">
+                            <h2 class="section-title">Live Pipeline</h2>
+                            <span class="pipeline-stage-indicator" id="overallStatusBadge">Idle</span>
+                        </div>
+                        <div class="pipeline-meta">
+                            <span id="agentsCompleteCount">0 / 4 agents complete</span>
+                            <span class="meta-dot">·</span>
+                            <span class="meta-timer" id="pipelineTimer">0.0s elapsed</span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar Track -->
+                    <div class="progress-track">
+                        <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+                    </div>
+
+                    <!-- Steps List -->
+                    <div class="steps-container" id="stepsContainer">
+                        <!-- Step 01: Search Agent -->
+                        <div class="step-card" id="stepCard_search" data-step="search">
+                            <div class="step-card-header">
+                                <div class="step-num">01</div>
+                                <div class="step-info">
+                                    <div class="step-title-line">
+                                        <span class="step-icon">🔍</span>
+                                        <span class="step-name">Search Agent</span>
+                                    </div>
+                                    <div class="step-desc">Gathers recent, reliable web information</div>
+                                </div>
+                                <div class="step-status-wrap">
+                                    <span class="step-duration" id="duration_search" style="display:none;">0.0s</span>
+                                    <span class="step-badge status-waiting" id="badge_search">WAITING</span>
+                                </div>
+                            </div>
+                            <div class="step-live-msg" id="liveMsg_search" style="display:none;">Scanning web for recent sources…</div>
+                            <div class="step-output-accordion" id="accordion_search" style="display:none;">
+                                <button class="accordion-toggle" data-target="output_search">
+                                    <span>Inspect Search Agent Output</span>
+                                    <span class="accordion-arrow">▾</span>
+                                </button>
+                                <div class="accordion-content" id="output_search" style="display:none;">
+                                    <pre class="raw-output"></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 02: Reader Agent -->
+                        <div class="step-card" id="stepCard_reader" data-step="reader">
+                            <div class="step-card-header">
+                                <div class="step-num">02</div>
+                                <div class="step-info">
+                                    <div class="step-title-line">
+                                        <span class="step-icon">📄</span>
+                                        <span class="step-name">Reader Agent</span>
+                                    </div>
+                                    <div class="step-desc">Scrapes & extracts deep webpage content</div>
+                                </div>
+                                <div class="step-status-wrap">
+                                    <span class="step-duration" id="duration_reader" style="display:none;">0.0s</span>
+                                    <span class="step-badge status-waiting" id="badge_reader">WAITING</span>
+                                </div>
+                            </div>
+                            <div class="step-live-msg" id="liveMsg_reader" style="display:none;">Scraping primary source for rich context…</div>
+                            <div class="step-output-accordion" id="accordion_reader" style="display:none;">
+                                <button class="accordion-toggle" data-target="output_reader">
+                                    <span>Inspect Reader Agent Scraping</span>
+                                    <span class="accordion-arrow">▾</span>
+                                </button>
+                                <div class="accordion-content" id="output_reader" style="display:none;">
+                                    <pre class="raw-output"></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 03: Writer Chain -->
+                        <div class="step-card" id="stepCard_writer" data-step="writer">
+                            <div class="step-card-header">
+                                <div class="step-num">03</div>
+                                <div class="step-info">
+                                    <div class="step-title-line">
+                                        <span class="step-icon">✍️</span>
+                                        <span class="step-name">Writer Chain</span>
+                                    </div>
+                                    <div class="step-desc">Synthesizes and drafts full research report</div>
+                                </div>
+                                <div class="step-status-wrap">
+                                    <span class="step-duration" id="duration_writer" style="display:none;">0.0s</span>
+                                    <span class="step-badge status-waiting" id="badge_writer">WAITING</span>
+                                </div>
+                            </div>
+                            <div class="step-live-msg" id="liveMsg_writer" style="display:none;">Composing structured research document…</div>
+                        </div>
+
+                        <!-- Step 04: Critic Chain -->
+                        <div class="step-card" id="stepCard_critic" data-step="critic">
+                            <div class="step-card-header">
+                                <div class="step-num">04</div>
+                                <div class="step-info">
+                                    <div class="step-title-line">
+                                        <span class="step-icon">🧐</span>
+                                        <span class="step-name">Critic Chain</span>
+                                    </div>
+                                    <div class="step-desc">Strictly evaluates, scores, and critiques</div>
+                                </div>
+                                <div class="step-status-wrap">
+                                    <span class="step-duration" id="duration_critic" style="display:none;">0.0s</span>
+                                    <span class="step-badge status-waiting" id="badge_critic">WAITING</span>
+                                </div>
+                            </div>
+                            <div class="step-live-msg" id="liveMsg_critic" style="display:none;">Evaluating report quality, citations & depth…</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section (Populated dynamically) -->
+        <section class="results-section" id="resultsSection" style="display: none;">
+            <div class="divider">
+                <span class="divider-text">RESEARCH INTELLIGENCE DELIVERED</span>
+            </div>
+
+            <!-- Report Card -->
+            <div class="card card-report" id="reportCard">
+                <div class="report-header">
+                    <div class="report-title-group">
+                        <div class="report-badge">📝 RESEARCH REPORT</div>
+                        <h2 class="report-topic-title" id="reportTopicTitle">Research Report</h2>
+                    </div>
+
+                    <div class="report-actions-toolbar">
+                        <div class="meta-tag" id="reportWordCount">0 words</div>
+                        <div class="meta-tag" id="reportReadTime">~1 min read</div>
+                        <button class="btn btn-sm btn-outline" id="copyReportBtn" title="Copy report markdown to clipboard">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span>Copy</span>
+                        </button>
+                        <button class="btn btn-sm btn-primary-gradient" id="downloadPdfBtn" title="Download formatted PDF">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span>Download PDF</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Markdown Content Target -->
+                <div class="report-body markdown-body" id="reportBody"></div>
+            </div>
+
+            <!-- Critic Feedback Card -->
+            <div class="card card-critic" id="criticCard">
+                <div class="critic-header">
+                    <div class="critic-badge">🧐 CRITIC EVALUATION & AUDIT</div>
+                    <div class="critic-score-pill" id="criticScoreBadge">
+                        <span class="score-label">Score</span>
+                        <span class="score-val" id="criticScoreVal">--/10</span>
+                    </div>
+                </div>
+
+                <div class="critic-body markdown-body" id="criticBody"></div>
+            </div>
+
+            <!-- Start New Research Floating Button -->
+            <div class="new-run-wrapper">
+                <button class="btn btn-secondary-outline" id="newRunBtn">
+                    <span>↺ Start Another Research Mission</span>
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Architecture Modal -->
+    <div class="modal-backdrop" id="archModal" style="display:none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>System Architecture & Topology</h3>
+                <button class="modal-close-btn" id="closeModalBtn">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>ResearchMind is a modular multi-agent reasoning swarm orchestrated over FastAPI and LangChain:</p>
+                <div class="modal-flowchart">
+                    <div class="flow-step">
+                        <span class="flow-icon">🔍</span>
+                        <strong>1. Search Agent</strong>
+                        <p>Queries Tavily Search API with dynamic relevance ranking to identify high-signal sources.</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <span class="flow-icon">📄</span>
+                        <strong>2. Reader Agent</strong>
+                        <p>Navigates to the most relevant URL and scrapes full body text using BeautifulSoup, cleaning boilerplate scripts.</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <span class="flow-icon">✍️</span>
+                        <strong>3. Writer Chain</strong>
+                        <p>Synthesizes search intelligence and scraped deep content into a structured research report with citations.</p>
+                    </div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step">
+                        <span class="flow-icon">🧐</span>
+                        <strong>4. Critic Chain</strong>
+                        <p>Conducts an adversarial audit evaluating factual clarity, structure, and depth, returning actionable feedback and a score.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>ResearchMind · FastAPI Backend + HTML5/CSS3/JavaScript Frontend · LangChain Multi-Agent Architecture</p>
+    </footer>
+
+    <!-- Frontend Script -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+
